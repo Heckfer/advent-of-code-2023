@@ -1,5 +1,6 @@
-import 'package:advent_of_code_2023/advent_of_code_2023.dart' as advent_of_code_2023;
+import 'package:advent_of_code_2023/day_1.dart';
 
-void main(List<String> arguments) {
-  print('Hello world: ${advent_of_code_2023.calculate()}!');
+void main(List<String> arguments) async {
+  final day1Problem1Result = await Day1.solveProblem1('assets/day1_input.txt');
+  print('Day 1 Problem 1: $day1Problem1Result');
 }
