@@ -48,8 +48,6 @@ class Day1 {
         .transform(LineSplitter())
         .map((line) {
       final (firstNumber, lastNumber) = _getNumbers(line);
-      print(line);
-      print("$firstNumber + $lastNumber = ${(firstNumber * 10) + lastNumber}");
       return (firstNumber * 10) + lastNumber;
     }).reduce((previous, current) {
       return previous + current;
@@ -70,38 +68,39 @@ class Day1 {
   }
 
   static (int, int) _getNumbers(String line) {
-    final pattern =
-        RegExp(r'(one|two|three|four|five|six|seven|eight|nine|[0-9])');
+    final patterns = [
+      RegExp(r'one'),
+      RegExp(r'two'),
+      RegExp(r'three'),
+      RegExp(r'four'),
+      RegExp(r'five'),
+      RegExp(r'six'),
+      RegExp(r'seven'),
+      RegExp(r'eight'),
+      RegExp(r'nine'),
+      RegExp('[0-9]')
+    ];
 
-    final allMatches = pattern.allMatches(line);
-    RegExpMatch? firstMatch;
-    RegExpMatch? lastMatch;
+    Match? firstMatch;
+    Match? lastMatch;
 
-    print('================');
-    print('Line: $line');
-    print('All Matches');
-    for (RegExpMatch currentMatch in allMatches) {
-      print(currentMatch[0]);
-    }
-
-    for (RegExpMatch currentMatch in allMatches) {
-      print('> Next Iteration');
-      int currentMatchStart = currentMatch.start;
-      int firstMatchStart = firstMatch?.start ?? 0;
-      int lastMatchStart = lastMatch?.start ?? 0;
-      print('Current: [${currentMatch[0]}] Index: $currentMatchStart');
-      print('First: [${firstMatch?[0]}] Index: $firstMatchStart');
-      print('Last: [${lastMatch?[0]}] Index: $lastMatchStart');
-      if (firstMatchStart >= currentMatchStart || firstMatch == null) {
-        print(
-            '$firstMatchStart >= $currentMatchStart: ${firstMatchStart <= currentMatchStart}');
-        firstMatch = currentMatch;
+    for (RegExp pattern in patterns) {
+      final allMatches = pattern.allMatches(line);
+      if (allMatches.isEmpty) {
+        continue;
       }
 
-      if (lastMatchStart <= currentMatchStart || lastMatch == null) {
-        print(
-            '$lastMatchStart <= $currentMatchStart: ${lastMatchStart >= currentMatchStart}');
-        lastMatch = currentMatch;
+      allMatches.toList().sort((a, b) => (a.start.compareTo(b.start)));
+
+      int firstMatchStart = firstMatch?.start ?? 0;
+      int lastMatchStart = lastMatch?.start ?? 0;
+
+      if (firstMatchStart >= allMatches.first.start || firstMatch == null) {
+        firstMatch = allMatches.first;
+      }
+
+      if (lastMatchStart <= allMatches.last.start || lastMatch == null) {
+        lastMatch = allMatches.last;
       }
     }
 
