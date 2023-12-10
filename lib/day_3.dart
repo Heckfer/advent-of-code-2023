@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -20,7 +21,6 @@ class Day3 {
       final currentRow = matrix[i];
 
       var numberBuilder = StringBuffer();
-      final List<int> possibleNumbers = [];
       var isAdjacentToSymbol = false;
       for (var j = 0; j < currentRow.length; j++) {
         final numberAtPosition = int.tryParse(matrix[i][j]);
@@ -56,7 +56,6 @@ class Day3 {
             final newNumber = int.parse(numberBuilder.toString());
 
             if (isAdjacentToSymbol) {
-              possibleNumbers.add(newNumber);
               sum += newNumber;
             }
           }
@@ -77,6 +76,70 @@ class Day3 {
         .transform(utf8.decoder)
         .transform(LineSplitter())
         .toList();
-    return 0;
+
+    final matrix = lines.map((e) => e.split('')).toList();
+
+    HashMap<(int, int), List<int>> possibleNumbers = HashMap();
+
+    for (var i = 0; i < matrix.length; i++) {
+      final currentRow = matrix[i];
+
+      var numberBuilder = StringBuffer();
+
+      (int, int)? adjacentStarPosition;
+
+      for (var j = 0; j < currentRow.length; j++) {
+        final numberAtPosition = int.tryParse(matrix[i][j]);
+        if (numberAtPosition == null) {
+          continue;
+        }
+
+        numberBuilder.write(numberAtPosition);
+
+        final neighbours = [
+          (max(i - 1, 0), max(j - 1, 0)),
+          (max(i - 1, 0), j),
+          (max(i - 1, 0), min(j + 1, currentRow.length - 1)),
+          (i, max(j - 1, 0)),
+          (i, min(j + 1, currentRow.length - 1)),
+          (min(i + 1, matrix.length - 1), max(j - 1, 0)),
+          (min(i + 1, matrix.length - 1), j),
+          (min(i + 1, matrix.length - 1), min(j + 1, currentRow.length - 1))
+        ];
+
+        for (var neighbour in neighbours) {
+          if (matrix[neighbour.$1][neighbour.$2] == "*") {
+            adjacentStarPosition = neighbour;
+          }
+        }
+
+        final shouldFinish = (j == currentRow.length - 1) ||
+            int.tryParse(matrix[i][j + 1]) == null;
+
+        if (shouldFinish) {
+          if (numberBuilder.isNotEmpty) {
+            final newNumber = int.parse(numberBuilder.toString());
+
+            if (adjacentStarPosition != null) {
+              if (possibleNumbers[adjacentStarPosition] == null) {
+                possibleNumbers[adjacentStarPosition] = [];
+              }
+
+              possibleNumbers[adjacentStarPosition]!.add(newNumber);
+            }
+          }
+
+          adjacentStarPosition = null;
+          numberBuilder = StringBuffer();
+        }
+      }
+    }
+
+    return possibleNumbers.values.map((numbersList) {
+      if (numbersList.length <= 1) {
+        return 0;
+      }
+      return numbersList.reduce((value, element) => value * element);
+    }).reduce((value, element) => value + element);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:advent_of_code_2023/day_1.dart';
 import 'package:advent_of_code_2023/day_2.dart';
 import 'package:advent_of_code_2023/day_3.dart';
+import 'package:advent_of_code_2023/day_4.dart';
 
 void main(List<String> arguments) async {
   final day1Problem1Result =
@@ -22,4 +23,12 @@ void main(List<String> arguments) async {
   final day3Problem1Result =
       await Day3.solveProblem1('assets/day3-1_input.txt');
   print('Day 3 Problem 1: $day3Problem1Result');
+
+  final day3Problem2Result =
+      await Day3.solveProblem2('assets/day3-2_input.txt');
+  print('Day 3 Problem 2: $day3Problem2Result');
+
+  final day4Problem1Result =
+      await Day4.solveProblem1('assets/day4-1_input.txt');
+  print('Day 4 Problem 1: $day4Problem1Result');
 }

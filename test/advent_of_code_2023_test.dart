@@ -1,6 +1,7 @@
 import 'package:advent_of_code_2023/day_1.dart';
 import 'package:advent_of_code_2023/day_2.dart';
 import 'package:advent_of_code_2023/day_3.dart';
+import 'package:advent_of_code_2023/day_4.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -32,5 +33,17 @@ void main() {
     int solution =
         await Day3.solveProblem1('test/assets/day3-1_test_input.txt');
     expect(solution, 4361);
+  });
+
+  test('day 3, problem 2', () async {
+    int solution =
+        await Day3.solveProblem2('test/assets/day3-2_test_input.txt');
+    expect(solution, 467835);
+  });
+
+  test('day 4, problem 1', () async {
+    int solution =
+        await Day4.solveProblem1('test/assets/day4-1_test_input.txt');
+    expect(solution, 13);
   });
 }
